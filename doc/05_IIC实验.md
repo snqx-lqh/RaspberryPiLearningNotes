@@ -124,8 +124,6 @@ cc -Wall -o main main.c oled.c -lwiringPi
 sudo ./main
 ```
 
-然后可以用示波器啥的，或者自己连接的LED灯在这个引脚上，就可以查看到变化。、
-
 想要停止这个程序，`Ctrl+c`即可。
 
 ### bcm2835
@@ -245,7 +243,7 @@ pip install luma.oled         #再次Pip安装
 deactivate #退出环境
 ```
 
-直接给代码了，python应该比较好理解 
+直接给代码了
 
 ```python
 #!/usr/bin/python3

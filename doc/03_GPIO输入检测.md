@@ -2,13 +2,21 @@
 
 首先，树莓派的GPIO口，不同的库给他的编号不同，有基本的功能名编的引脚，然后BCM库有一种编码，然后是wiringPi有一种编码。我们下面的代码将控制GPIO.1的输出高低电平的变换，他在BCM编码是18，在WiringPi是1。检测GPIO.0的输入高低电平变化。
 
-该部分实现的功能，检测GPIO.0的输入，控制GPIO.1的输出
+该笔记实现的功能，检测GPIO.0的输入，控制GPIO.1的输出
 
-![img](image/02_GPIO输出控制/684f9d7d95d6f14087320b9afcfd71b0.png)
+![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
 
 ### wiringPi
 
-c文件名我命名为main.c
+1、`int digitalRead (int pin)`
+
+pin：读取的引脚
+
+返回：引脚上的电平，可以是LOW HIGH 之一
+
+
+
+c文件名我命名为main.c，实现的功能就是按键端口检测为0，就设置LED端口电平为0，反之为1。
 
 ```c
 #include <wiringPi.h>
@@ -33,11 +41,9 @@ int main(void)
         if(key_value == 0)
         {
             digitalWrite(LED,0);      //设置引脚电平为0
-            printf("set level 0\r\n");
         }else
         { 
             digitalWrite(LED,1);      //设置引脚电平为1
-            printf("set level 1\r\n");  
         }  
     }
 }

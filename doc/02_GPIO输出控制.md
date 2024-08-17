@@ -1,8 +1,8 @@
 ## GPIO常用编程方式和区别
 
-树莓派的GPIO控制方式有使用wiringPi库、BCM2835库、Rpi.GPIO库。
+树莓派的GPIO编程控制方式有使用wiringPi库、BCM2835库、RPi.GPIO库。
 
-其中wiringPi库、BCM2835库是使用C++编程，Rpi.GPIO是使用python编程方式。下面将实现这3种方式的安装和控制。
+其中wiringPi库、BCM2835库是使用C++编程，RPi.GPIO是使用python编程方式。下面将实现这3种方式的安装和控制。
 
 ## 函数库的安装
 
@@ -16,7 +16,7 @@ WiringPi是应用于树莓派平台的GPIO控制库函数，WiringPi中的函数
 sudo apt-get install wiringpi
 ```
 
-不成功采用其他方法。如果树莓派是32位系统，输入以下指令，但是我没试过不知可不可以。
+不成功采用其他方法。如果树莓派是32位系统，输入以下指令，但是我没试过不知可不可以，因为我是64位。
 
 ```bash
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
@@ -30,7 +30,7 @@ sudo apt-get update
 sudo apt-get install build-essential
 git clone https://github.com/WiringPi/WiringPi.git
 # 如果不出意外，你的clone应该是成功不了，你可以自己下载后，然后使用MobaXterm将文件夹传上去，我在software文件夹提供了我记笔记时的文件包，但是我的可能不是最新的。
-cd WiringPi
+cd WiringPi 
 ./build
 ```
 
@@ -45,11 +45,13 @@ gpio readall
 
 如果能够打印版本信息和引脚信息，即是完成了安装。
 
+![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
+
 ### BCM2835库
 
-bcm2835库是树莓派cpu芯片的库函数，相当于stm32的固件库一样，底层是直接操作寄存器。而wiringPi库和python的RPi.GPIO库其底层都是通过读写linux系统的设备文件操作设备
+bcm2835库是树莓派cpu芯片的库函数，相当于stm32的固件库一样，底层是直接操作寄存器。而wiringPi库和python的RPi.GPIO库其底层都是通过读写linux系统的设备文件操作设备。
 
-从BCM2835的[官网](http://www.airspayce.com/mikem/bcm2835/)下载最新的库，然后放到树莓派种解压安装，我下载的时候是1.75的版本，也会放在我的软件文件夹中。
+从BCM2835的[官网](http://www.airspayce.com/mikem/bcm2835/)下载最新的库，然后放到树莓派种解压安装，我下载的时候是1.75的版本，也会放在我的开源软件文件夹中。
 
 ```bash
 tar -zxvf bcm2835-1.75.tar.gz
@@ -64,7 +66,7 @@ sudo make install
 
 ### RPi.GPIO
 
-如果是按照我之前的安装步骤安装的话，他应该会默认安装RPi.GPIO。可以使用python测试
+如果是按照我之前第一节的安装步骤安装的话，他应该会默认安装RPi.GPIO。可以使用python测试
 
 ```bash
 pi@raspberrypi:~ $ python
@@ -82,15 +84,39 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ## 控制GPIO口输出
 
-首先，树莓派的GPIO口，不同的库给他的编号不同，有基本的功能名编的引脚，然后BCM库有一种编码，然后是wiringPi有一种编码。我们下面的代码将控制GPIO.1的输出高低电平的变换，他在BCM编码是18，在WiringPi是1
-
-![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
-
-
-
-![img](image/02_GPIO输出控制/684f9d7d95d6f14087320b9afcfd71b0.png)
+首先，树莓派的GPIO口，不同的库给他的编号不同，有基本的功能名编的引脚，然后BCM库有一种编码，然后是wiringPi有一种编码。我们下面的代码将控制GPIO.1的输出高低电平的变换，他在BCM编码是18，在WiringPi是1，具体的编码对应可以看上面`gpio readall`打印的引脚信息。
 
 ### wiringPi
+
+1、`int wiringPiSetup (void)`
+
+返回:执行状态，-1表示失败
+
+使用wiringPi时，你必须在执行任何操作前初始化树莓派，否则程序不能正常工作。当使用这个函数初始化树莓派引脚时，程序使用的是wiringPi 引脚编号表。引脚的编号为 0~16需要root权限
+
+2、`int wiringPiSetupGpio (void)`
+
+返回:执行状态，-1表示失败
+
+当使用这个函数初始化树莓派引脚时，程序中使用的是BCM GPIO 引脚编号表。需要root权限
+
+3、`void pinMode (int pin, int mode)`
+
+pin：配置的引脚
+
+mode:指定引脚的IO模式
+
+可取的值：INPUT、OUTPUT、PWM_OUTPUT，GPIO_CLOCK
+
+4、`void digitalWrite (int pin, int value)`
+
+pin：控制的引脚
+
+value：引脚输出的电平值。
+
+可取的值：HIGH，LOW分别代表高低电平
+
+
 
 下面就是写了一个使用wiringPi的控制0号端口高低电平变化的代码。c文件名我命名为main.c
 
@@ -101,7 +127,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 int main(void)
 {
-    if(wiringPiSetup() < 0) //当使用这个函数初始化树莓派引脚时，程序使用的是wiringPi 引脚编号表。
+    if(wiringPiSetup() < 0) 
         return 1;
     pinMode(LED,OUTPUT); //设置引脚为输出模式
     while (1)
@@ -133,6 +159,30 @@ sudo ./main
 想要停止这个程序，`Ctrl+c`即可。
 
 ### bcm2835库
+
+1、`int bcm2835_init (void)`
+
+返回:执行状态，-1表示失败
+
+当使用这个函数初始化树莓派引脚时，程序中使用的是BCM GPIO 引脚编号表。
+
+2、`int bcm2835_gpio_fsel(PIN,BCM2835_GPIO_FSEL_OUTP);`
+
+pin：配置的引脚
+
+mode:指定引脚的IO模式
+
+可取的值：INPUT、OUTPUT、PWM_OUTPUT，GPIO_CLOCK
+
+3、`bcm2835_gpio_write(PIN,HIGH)`
+
+pin：控制的引脚
+
+value：引脚输出的电平值。
+
+可取的值：HIGH，LOW分别代表高低电平
+
+
 
 bcm的引脚编号和wiringPi不同，注意，下面是一个实际例子
 
@@ -181,7 +231,7 @@ sudo ./main
 
 ### RPi.GPIO
 
-直接给代码了，python应该比较好理解
+直接给代码了，python应该比较好理解，具体的实现注释放在代码里面
 
 ```python
 #!/usr/bin/python

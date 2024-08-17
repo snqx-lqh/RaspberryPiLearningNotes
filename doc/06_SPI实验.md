@@ -7,8 +7,6 @@ sudo raspi-config
 Interfacing Options------>SPI------>Yes------->OK------->finsh
 ```
 
-![img](image/02_GPIO输出控制/684f9d7d95d6f14087320b9afcfd71b0.png)
-
 ## 代码编写
 
 ### wiringPi
