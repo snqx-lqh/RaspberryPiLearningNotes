@@ -7,7 +7,11 @@ sudo raspi-config
 Interfacing Options------>I2C------>Yes------->OK------->finsh
 ```
 
-然后将屏幕接到树莓派上，然后使用以下指令查看
+然后将屏幕接到树莓派上，接SDA.1和SCL.1的脚
+
+![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
+
+然后使用以下指令查看
 
 ```bash
 sudo i2cdetect -y -a 1
@@ -23,7 +27,7 @@ sudo i2cdetect -y -a 1
 
 ### wiringPi
 
-主要说一下怎么初始化和发送数据，具体的实现，参考开源链接。
+主要说一下怎么初始化和发送数据，具体的实现，参考github的开源链接。
 
 1、函数设置要控制的节点对象，将返回设备节点。
 

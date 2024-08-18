@@ -2,10 +2,32 @@
 
 我们这里会使用树莓派进行串口的收发。
 
-```
+```bash
 sudo raspi-config
-Interfacing Options------>SPI------>Yes------->OK------->finsh
+Interfacing Options------>Serial Port
 ```
+
+会弹出两个弹框
+
+第一个：Would you like a login shell to be accessible over serial?  选择否，把串口当作shell的
+
+第二个：Would you like the serial port hardware to be enabled?   选择是，我们就可以控制硬件串口了
+
+然后会让你重启，重启之后，查看串口
+
+```bash
+ls -l /dev/serial*
+```
+
+应该会发现，以下这种信息
+
+```bash
+lrwxrwxrwx 1 root root 5  8月18日 14:17 /dev/serial0 -> ttyS0
+```
+
+然后我们把USB转TTL接上树莓派，就可以来测试了，引脚是GPIO.8和GPIO.10
+
+![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
 
 ## 代码编写
 
@@ -96,6 +118,8 @@ cc -Wall -o main main.c -lwiringPi
 sudo ./main
 ```
 
+然后就可以使用上位机进行串口数据的发送，这个代码写的是一个回环。
+
 想要停止这个程序，`Ctrl+c`即可。
 
 ### bcm2835
@@ -135,7 +159,7 @@ except KeyboardInterrupt:
 
 ## linuxc语言访问文件
 
-通过访问文件的方式访问串口并发送
+我们还可以，通过访问文件的方式访问串口并发送
 
 ```c
 #include <stdio.h>
@@ -255,3 +279,4 @@ sudo ./main
 ```
 
 想要停止这个程序，`Ctrl+c`即可。
+

@@ -7,6 +7,12 @@ sudo raspi-config
 Interfacing Options------>SPI------>Yes------->OK------->finsh
 ```
 
+然后将屏幕接到树莓派上，接mosi和sclk的脚，DC接28，RST接29，CE接CE0
+
+这个实验有一个坑我还没找到，就是每次我使用了BCM库来控制屏幕后，就不能使用Python和WringPi来控制了，这时候把SPI关一次再开一次才可以使用，但是如果一个时间内只掉用他们中的单独一个，是不会有问题的。
+
+![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
+
 ## 代码编写
 
 ### wiringPi
@@ -179,7 +185,7 @@ void bcm2835_spi_setBitOrder(uint8_t order);
 void bcm2835_spi_setDataMode(uint8_t mode);
 ```
 
-4、设置频率
+4、设置分频系数
 
 ```c
 void bcm2835_spi_setClockDivider(uint16_t divider);
@@ -191,7 +197,7 @@ void bcm2835_spi_setClockDivider(uint16_t divider);
 void bcm2835_spi_chipSelect(uint8_t cs);
 ```
 
-6、选择激活时的CS电平
+6、选择激活时的CS电平，就是工作时候的CS电平
 
 ```c
 void bcm2835_spi_setChipSelectPolarity(uint8_t cs, uint8_t active);
@@ -203,7 +209,7 @@ void bcm2835_spi_setChipSelectPolarity(uint8_t cs, uint8_t active);
 void bcm2835_spi_end(void);
 ```
 
-注意，下面是一个实际例子，oled部分的处理和wiringPi一样这里就不写了。
+注意，下面是一个实际例子，oled部分的处理和wiringPi一样这里就不写了。**注意两种库的引脚编号不一样**
 
 ```c
 #include <stdio.h>

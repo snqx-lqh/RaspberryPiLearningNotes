@@ -1,10 +1,12 @@
-## 检测GPIO口输入
+## 说明
 
-首先，树莓派的GPIO口，不同的库给他的编号不同，有基本的功能名编的引脚，然后BCM库有一种编码，然后是wiringPi有一种编码。我们下面的代码将控制GPIO.1的输出高低电平的变换，他在BCM编码是18，在WiringPi是1。检测GPIO.0的输入高低电平变化。
+首先，树莓派的GPIO口，不同的库给他的编号不同，有基本的功能名编的引脚，然后BCM库有一种编码，然后是wiringPi有一种编码。我们下面的代码将通过检测GPIO.0的输入高低电平变化来控制GPIO.1的输出高低电平的变换。
 
 该笔记实现的功能，检测GPIO.0的输入，控制GPIO.1的输出
 
 ![image-20240817201702470](image/02_GPIO输出控制/image-20240817201702470.png)
+
+## 代码
 
 ### wiringPi
 
@@ -63,11 +65,23 @@ cc -Wall -o main main.c -lwiringPi
 sudo ./main
 ```
 
-然后可以用示波器啥的，或者自己连接的LED灯在这个引脚上，就可以查看到变化。、
+然后可以用示波器啥的，或者自己连接的KEY和LED灯在这两个引脚上，就可以查看到变化。
 
 想要停止这个程序，`Ctrl+c`即可。
 
 ### bcm2835库
+
+1、`void bcm2835_gpio_set_pud(uint8_t pin, uint8_t pud);`
+
+pin：配置的引脚
+
+mode:指定引脚的上下拉模式，BCM2835_GPIO_PUD_OFF、BCM2835_GPIO_PUD_DOWN、BCM2835_GPIO_PUD_UP
+
+2、`uint8_t bcm2835_gpio_lev(uint8_t pin);`
+
+pin：配置的引脚
+
+读取对应的引脚的值
 
 bcm的引脚编号和wiringPi不同，注意，下面是一个实际例子
 
@@ -121,13 +135,13 @@ gcc -Wall main.c -o main -lbcm2835
 sudo ./main
 ```
 
-然后可以用示波器啥的，或者自己连接的LED灯在这个引脚上，就可以查看到变化。、
+然后可以用示波器啥的，或者自己连接的KEY和LED灯在这两个引脚上，就可以查看到变化。
 
 想要停止这个程序，`Ctrl+c`即可。
 
 ### RPi.GPIO
 
-直接给代码了，python应该比较好理解
+直接给代码了 
 
 ```python
 #!/usr/bin/python

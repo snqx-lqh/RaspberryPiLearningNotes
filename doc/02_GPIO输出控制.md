@@ -66,7 +66,7 @@ sudo make install
 
 ### RPi.GPIO
 
-如果是按照我之前第一节的安装步骤安装的话，他应该会默认安装RPi.GPIO。可以使用python测试
+如果是按照我之前第一节的安装步骤安装的话，他应该会默认安装RPi.GPIO，而且该固件默认的python是python3，这可能和以前部分教程说的python2不太一样，这点需要注意，如果你不是下的我上篇博客说的版本，需要自己去找教程安装python3和对应的RPi.GPIO。可以使用python测试
 
 ```bash
 pi@raspberrypi:~ $ python
@@ -166,25 +166,25 @@ sudo ./main
 
 当使用这个函数初始化树莓派引脚时，程序中使用的是BCM GPIO 引脚编号表。
 
-2、`int bcm2835_gpio_fsel(PIN,BCM2835_GPIO_FSEL_OUTP);`
+2、`void bcm2835_gpio_fsel(uint8_t pin, uint8_t mode);`
 
 pin：配置的引脚
 
 mode:指定引脚的IO模式
 
-可取的值：INPUT、OUTPUT、PWM_OUTPUT，GPIO_CLOCK
+可取的值：BCM2835_GPIO_FSEL_INPT、BCM2835_GPIO_FSEL_OUTP或者另外6个alternate function中的一个
 
-3、`bcm2835_gpio_write(PIN,HIGH)`
+3、`void bcm2835_gpio_write(uint8_t pin, uint8_t on);`
 
 pin：控制的引脚
 
-value：引脚输出的电平值。
+on：引脚输出的电平值。
 
 可取的值：HIGH，LOW分别代表高低电平
 
 
 
-bcm的引脚编号和wiringPi不同，注意，下面是一个实际例子
+bcm的引脚编号和wiringPi不同，需要注意，下面是一个实际例子
 
 ```c
 #include <bcm2835.h>
