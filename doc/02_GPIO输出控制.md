@@ -10,20 +10,7 @@
 
 WiringPi是应用于树莓派平台的GPIO控制库函数，WiringPi中的函数类似于Arduino的Wiring系统
 
-安装相关的库，你可以先尝试下面这个指令，但是多半会失败，报错没有可安装候选，如果能成功更好
-
-```bash
-sudo apt-get install wiringpi
-```
-
-不成功采用其他方法。如果树莓派是32位系统，输入以下指令，但是我没试过不知可不可以，因为我是64位。
-
-```bash
-wget https://project-downloads.drogon.net/wiringpi-latest.deb
-sudo dpkg -i wiringpi-latest.deb
-```
-
-我的是64位系统，输入
+下载的话输入
 
 ```bash
 sudo apt-get update
@@ -33,8 +20,6 @@ git clone https://github.com/WiringPi/WiringPi.git
 cd WiringPi 
 ./build
 ```
-
-以上，参考文章[apt-get install wiringpi errors All In One](https://www.cnblogs.com/xgqfrms/p/17369876.html)
 
 然后就可以使用以下信息查看安装是否完成。
 

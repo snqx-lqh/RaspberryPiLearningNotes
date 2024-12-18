@@ -4,6 +4,8 @@
 
 本文主要是看的B站[从零开始学Makefile做的笔记](https://www.bilibili.com/video/BV1Bv4y1J7QT/?spm_id_from=333.337.top_right_bar_window_custom_collection.content.click&vd_source=fcf02d9420f87f9d13e80731eaba983f)，这篇文章使用的代码测试也是使用的他视频提供的代码。但是我只实现了Makefile基础部分的内容，后面的内容没有实现。
 
+参考开源链接：https://gitee.com/unlimited13/cpp
+
 ## Makefile基础
 
 我们可以先查看一下我们树莓派的make版本，下面是我的打印信息，有版本，许可等。
