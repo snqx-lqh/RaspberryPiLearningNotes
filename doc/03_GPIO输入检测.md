@@ -10,13 +10,21 @@
 
 ### wiringPi
 
+**部分API解释：**
+
 1、`int digitalRead (int pin)`
 
 pin：读取的引脚
 
 返回：引脚上的电平，可以是LOW HIGH 之一
 
+2、`void pullUpDnControl   (int pin, int pud) `
 
+pin：配置的引脚
+
+pud：设置上下拉模式 PUD_OFF：无     PUD_DOWN：下拉     PUD_UP：上拉
+
+**实际例子实现：**
 
 c文件名我命名为main.c，实现的功能就是按键端口检测为0，就设置LED端口电平为0，反之为1。
 
@@ -35,6 +43,7 @@ int main(void)
         return 1;
     
     pinMode(KEY,INPUT);  //设置引脚为输入模式
+    pullUpDnControl(KEY,PUD_UP);//设置引脚为上拉模式
     pinMode(LED,OUTPUT); //设置引脚为输出模式
     
     while (1)
@@ -71,6 +80,8 @@ sudo ./main
 
 ### bcm2835库
 
+**部分API解释：**
+
 1、`void bcm2835_gpio_set_pud(uint8_t pin, uint8_t pud);`
 
 pin：配置的引脚
@@ -82,6 +93,8 @@ mode:指定引脚的上下拉模式，BCM2835_GPIO_PUD_OFF、BCM2835_GPIO_PUD_DO
 pin：配置的引脚
 
 读取对应的引脚的值
+
+**实际例子实现：**
 
 bcm的引脚编号和wiringPi不同，注意，下面是一个实际例子
 
